@@ -30,8 +30,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import edu.eci.cvds.sampleprj.dao.PersistenceException;
 import edu.eci.cvds.sampleprj.dao.mybatis.mappers.ClienteMapper;
 import edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemMapper;
+import edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemRentadoMapper;
+import edu.eci.cvds.sampleprj.dao.mybatis.mappers.TipoItemMapper;
 import edu.eci.cvds.samples.entities.Item;
 import edu.eci.cvds.samples.entities.TipoItem;
 
@@ -67,12 +70,15 @@ public class MyBatisExample {
      * @param args
      * @throws SQLException
      * @throws ParseException
+     * @throws PersistenceException
      */
-    public static void main(String args[]) throws SQLException, ParseException {
+    public static void main(String args[]) throws SQLException, ParseException, PersistenceException {
         SqlSessionFactory sessionfact = getSqlSessionFactory();
         SqlSession sqlss = sessionfact.openSession();
         ClienteMapper cm = sqlss.getMapper(ClienteMapper.class);
         ItemMapper im = sqlss.getMapper(ItemMapper.class);
+        TipoItemMapper tim = sqlss.getMapper(TipoItemMapper.class);
+        ItemRentadoMapper irm = sqlss.getMapper(ItemRentadoMapper.class);
         System.out.println("---------------------------------------------");
         System.out.println("Consulta Clientes PA");
         System.out.println(cm.consultarClientes());
@@ -86,11 +92,25 @@ public class MyBatisExample {
         System.out.println("Consultar Item con id 2");
         System.out.println(im.consultarItem(1234));
         System.out.println("---------------------------------------------");
+        System.out.println("Consultar todos los tipos de items");
+        System.out.println(tim.getTiposItems());
+        System.out.println("---------------------------------------------");
+        System.out.println("Consultar Tipo Item por el id 2");
+        System.out.println(tim.getTipoItem(2));
+        System.out.println("---------------------------------------------");
+        System.out.println("Consultar todos los items rentados");
+        System.out.println(irm.consultarItemsRentados());
+        System.out.println("---------------------------------------------");
+        System.out.println("Consultar Item Rentado con id 2132738");
+        System.out.println(irm.consultarItemRentado(2132738));
+        System.out.println("---------------------------------------------");
         /* Insertar Item Rentado */
-        cm.agregarItemRentadoACliente(4, 2, new SimpleDateFormat("yyyy-MM-dd").parse("2020-11-10"), new SimpleDateFormat("yyyy-MM-dd").parse("2020-12-10"));
+        /* cm.agregarItemRentadoACliente(4, 2, new SimpleDateFormat("yyyy-MM-dd").parse("2020-11-10"), new SimpleDateFormat("yyyy-MM-dd").parse("2020-12-10")); */
         /* Insertar Item */
-        Item item = new Item(new TipoItem(2,"Pelis"),2159966,"prueba","descripcion prueba",new SimpleDateFormat("yyyy-MM-dd").parse("2020-11-17"),(long)9000,"prueba","prueba");
-        im.insertarItem(item);
+        /* Item item = new Item(new TipoItem(2,"Pelis"),2159966,"prueba","descripcion prueba",new SimpleDateFormat("yyyy-MM-dd").parse("2020-11-17"),(long)9000,"prueba","prueba");
+        im.insertarItem(item); */
+        /* Insertar Tipo Item */
+        /* tim.addTipoItem(new TipoItem(19,"Prueba")); */
         
         sqlss.commit();
         sqlss.close();

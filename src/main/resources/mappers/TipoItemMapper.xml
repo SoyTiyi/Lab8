@@ -8,6 +8,21 @@
 		select c.nombre as nombre, c.documento as documento, c.telefono as telefono, c.direccion as direccion, c.email as email, c.vetado as vetado, ir.id as irId, ir.fechainiciorenta as irFechaInicio, ir.fechafinrenta as irFechaFin, i.id as itemId, i.nombre as itemNombre, i.descripcion as itemDescripcion, i.fechalanzamiento as itemFechaLanzamiento, i.tarifaxdia as itemTarifa, i.formatorenta as itemFormato, i.genero as itemGenero, ti.id as tipoId, ti.descripcion as tipoDescripcion
     FROM VI_CLIENTES as c left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento left join VI_ITEMS as i on ir.ITEMS_id=i.id left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id;
   </select> -->
+  <!-- Select todos los items -->
+  <select parameterType="map" id="getTiposItems" resultMap="TipoItemResult">
+    select ti.id, ti.descripcion
+    FROM VI_TIPOITEM as ti;
+  </select>
+  <!-- Select con un id en especifico -->
+  <select parameterType="map" id="getTipoItem" resultMap="TipoItemResult">
+    select ti.id, ti.descripcion
+    FROM VI_TIPOITEM as ti
+    WHERE ti.id= #{idti};
+  </select>
+  <!-- Insertar nuevo TipoItem -->
+  <insert parameterType="map" id="addTipoItem">
+    insert into VI_TIPOITEM(id,descripcion) values (#{ti.id},#{ti.descripcion});
+  </insert>
   <!-- TipoItem -->
   <resultMap id="TipoItemResult" type="TipoItem">
     <id property="id" column="id"/>

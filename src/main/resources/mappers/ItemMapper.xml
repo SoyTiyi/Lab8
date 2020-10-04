@@ -14,6 +14,22 @@
     FROM VI_ITEMS as i left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id
     WHERE i.id = #{idt};
   </select>
+
+  <select parameterType="map" id="consultarMultaRetrasoxDia" resultMap="ItemResult">
+    select i.tarifaxdia
+    FROM VI_ITEMS as i
+    WHERE i.id=#{id};
+  </select>
+
+  <select parameterType="map" id="consultarItemsDisponibles" resultMap="ItemResult">
+    select * 
+    FROM VI_ITEMS as i
+    WHERE i.id not in (SELECT ir.id from VI_ITEMRENTADO as ir);
+  </select>
+
+  <update parameterType="map" id="actualizarTarifaItem">
+    update VI_ITEMS set tarifaxdia=#{tarifa} where id=#{id};
+  </update>
   <!-- Item -->	
   <resultMap id="ItemResult" type="Item">
     <id property="id" column="i_id"/>
