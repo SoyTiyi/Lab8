@@ -8,7 +8,7 @@ import edu.eci.cvds.samples.entities.ItemRentado;
 
 public interface ClienteDAO {
     
-    public void saveItemRentadoCliente(int id, int idit, Date fechainicio, Date fechafin) throws PersistenceException;
+    public void saveItemRentadoCliente(long id, int idit, Date fechainicio, Date fechafin) throws PersistenceException;
 
     public Cliente load(long id) throws PersistenceException;
 

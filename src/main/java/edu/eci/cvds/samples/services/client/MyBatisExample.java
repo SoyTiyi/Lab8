@@ -104,6 +104,12 @@ public class MyBatisExample {
         System.out.println("Consultar Item Rentado con id 2132738");
         System.out.println(irm.consultarItemRentado(2132738));
         System.out.println("---------------------------------------------");
+        System.out.println("Consultar items cliente con id 147852");
+        System.out.println(cm.consultarItems(147852));
+        System.out.println("---------------------------------------------");
+        System.out.println("Consultar items disponibles");
+        System.out.println(im.consultarItemsDisponibles());
+        System.out.println("---------------------------------------------");
         /* Insertar Item Rentado */
         /* cm.agregarItemRentadoACliente(4, 2, new SimpleDateFormat("yyyy-MM-dd").parse("2020-11-10"), new SimpleDateFormat("yyyy-MM-dd").parse("2020-12-10")); */
         /* Insertar Item */

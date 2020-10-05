@@ -22,7 +22,7 @@
   </select>
 
   <select parameterType="map" id="consultarItemsDisponibles" resultMap="ItemResult">
-    select * 
+    select i.nombre as i_nombre, i.descripcion as i_descripcion
     FROM VI_ITEMS as i
     WHERE i.id not in (SELECT ir.id from VI_ITEMRENTADO as ir);
   </select>

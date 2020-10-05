@@ -26,8 +26,7 @@ public class MyBATISClienteDAO implements ClienteDAO {
     }
 
     @Override
-    public void saveItemRentadoCliente(int idcli, int idit, Date fechainicio, Date fechafin)
-            throws PersistenceException {
+    public void saveItemRentadoCliente(long idcli, int idit, Date fechainicio, Date fechafin) throws PersistenceException {
         try {
             clienteMapper.agregarItemRentadoACliente(idcli, idit, fechainicio, fechafin);
         } catch (org.apache.ibatis.exceptions.PersistenceException e) {
@@ -72,6 +71,5 @@ public class MyBATISClienteDAO implements ClienteDAO {
             throw new PersistenceException("Error al vetar al cliente con documento "+docu, e);
         }
 
-    }
-    
+    }    
 }

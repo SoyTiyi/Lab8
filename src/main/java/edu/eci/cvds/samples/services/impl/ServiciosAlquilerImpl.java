@@ -14,6 +14,10 @@ import edu.eci.cvds.samples.services.ExcepcionServiciosAlquiler;
 import edu.eci.cvds.samples.services.ServiciosAlquiler;
 import org.mybatis.guice.transactional.Transactional;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Singleton
@@ -85,12 +89,25 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
 
    @Override
    public long consultarMultaAlquiler(int iditem, Date fechaDevolucion) throws ExcepcionServiciosAlquiler {
+        long diasDeMas = 0;
        try {
-           
+        List<Cliente> clientes = consultarClientes();
+        for (int i=0 ; i<clientes.size() ; i++) {
+            ArrayList<ItemRentado> rentados = clientes.get(i).getRentados();
+            for (int j=0 ; j<rentados.size() ; j++) {
+                if (rentados.get(j).getItem().getId() == iditem) {
+                    diasDeMas = ChronoUnit.DAYS.between(rentados.get(j).getFechafinrenta().toLocalDate(), fechaDevolucion.toLocalDate());
+                    if (diasDeMas < 0) { 
+                        return diasDeMas; 
+                    }
+                    return diasDeMas * valorMultaRetrasoxDia(rentados.get(j).getId());
+                }
+            }
+        }
        } catch (Exception e) {
-           //TODO: handle exception
+            throw new UnsupportedOperationException("Not supported yet.");
        }
-       throw new UnsupportedOperationException("Not supported yet.");
+       return diasDeMas;
    }
 
    @Override
@@ -115,7 +132,10 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
    @Override
    public void registrarAlquilerCliente(Date date, long docu, Item item, int numdias) throws ExcepcionServiciosAlquiler {
        try {
-           /* clienteDAO.saveItemRentadoCliente(id, idit, fechainicio, fechafin); */
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, numdias);
+        clienteDAO.saveItemRentadoCliente(docu,item.getId(),date,new java.sql.Date(calendar.getTime().getTime()));
        } catch (Exception e) {
            throw new UnsupportedOperationException("Not supported yet.");
        }
