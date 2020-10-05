@@ -33,9 +33,9 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
    private TipoItemDAO tipoItemDAO;
 
    @Override
-   public int valorMultaRetrasoxDia(int itemId) {
+   public long valorMultaRetrasoxDia(int itemId) {
        try {
-           return (int) itemDAO.load(itemId).getTarifaxDia();
+           return itemDAO.load(itemId).getTarifaxDia();
        } catch (Exception e) {
            throw new UnsupportedOperationException("Not supported yet.");
        }
@@ -89,26 +89,27 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
 
    @Override
    public long consultarMultaAlquiler(int iditem, Date fechaDevolucion) throws ExcepcionServiciosAlquiler {
-        long diasDeMas = 0;
        try {
         List<Cliente> clientes = consultarClientes();
         for (int i=0 ; i<clientes.size() ; i++) {
             ArrayList<ItemRentado> rentados = clientes.get(i).getRentados();
             for (int j=0 ; j<rentados.size() ; j++) {
-                if (rentados.get(j).getItem().getId() == iditem) {
-                    diasDeMas = ChronoUnit.DAYS.between(rentados.get(j).getFechafinrenta().toLocalDate(), fechaDevolucion.toLocalDate());
-                    if (diasDeMas < 0) { 
-                        return diasDeMas; 
+                if(rentados.get(j).getItem()!=null){
+                    if (rentados.get(j).getItem().getId() == iditem) {
+                        long diasRetraso = ChronoUnit.DAYS.between(rentados.get(j).getFechafinrenta().toLocalDate(), fechaDevolucion.toLocalDate());
+                        if (diasRetraso < 0) { 
+                            return 0; 
+                        }
+                        return diasRetraso * valorMultaRetrasoxDia(rentados.get(j).getId());
                     }
-                    return diasDeMas * valorMultaRetrasoxDia(rentados.get(j).getId());
                 }
             }
         }
        } catch (Exception e) {
-            throw new UnsupportedOperationException("Not supported yet.");
+          throw  new ExcepcionServiciosAlquiler("Error al consultar multa de item con id: "+iditem);
        }
-       return diasDeMas;
-   }
+       return iditem;
+    }
 
    @Override
    public TipoItem consultarTipoItem(int id) throws ExcepcionServiciosAlquiler {
@@ -116,7 +117,7 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
         return tipoItemDAO.load(id);
        }
        catch(Exception e){
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Error al consultar el Tipo Item con id: "+id);
        }
    }
 
@@ -125,20 +126,23 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
        try{
            return tipoItemDAO.loadItems();
        } catch(Exception e){
-           throw new UnsupportedOperationException("Not supported yet.");
+           throw new UnsupportedOperationException("Error al consultar los Tipos Items");
        }
    }
 
    @Override
    public void registrarAlquilerCliente(Date date, long docu, Item item, int numdias) throws ExcepcionServiciosAlquiler {
-       try {
+    try{
+        if(clienteDAO.load(docu)==null){
+            throw new ExcepcionServiciosAlquiler("El cliente es null Pa") ;
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_YEAR, numdias);
         clienteDAO.saveItemRentadoCliente(docu,item.getId(),date,new java.sql.Date(calendar.getTime().getTime()));
-       } catch (Exception e) {
-           throw new UnsupportedOperationException("Not supported yet.");
-       }
+    }  catch (PersistenceException ex) {
+        throw new ExcepcionServiciosAlquiler("Error al agregar item rentado al cliente con id: " + docu, ex);
+    }
    }
 
    @Transactional
@@ -147,7 +151,7 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
        try {
            clienteDAO.addCliente(c);
        } catch (Exception e) {
-           throw new UnsupportedOperationException("Not supported yet.");
+           throw new UnsupportedOperationException("Error al registrar al nuevo Cliente");
        }
    }
 
@@ -156,7 +160,7 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
        try {
            return numdias * itemDAO.load(iditem).getTarifaxDia();
        } catch (Exception e) {
-           throw new UnsupportedOperationException("Not supported yet.");
+           throw new UnsupportedOperationException("Error al consultar costo alquiler del item con id: "+iditem);
        }
    }
 
@@ -166,7 +170,7 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
        try {
            itemDAO.actualizarTarifaItem(id, tarifa);
        } catch (Exception e) {
-           throw new UnsupportedOperationException("Not supported yet.");
+           throw new UnsupportedOperationException("Error al actualizar tarifa item");
        }
    }
 
@@ -176,7 +180,7 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
        try {
            itemDAO.save(i);
        } catch (Exception e) {
-           throw new UnsupportedOperationException("Not supported yet."); 
+           throw new UnsupportedOperationException("Error al registrar el Item"); 
        }
    }
 
@@ -184,6 +188,9 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
    @Override
    public void vetarCliente(long docu, boolean estado) throws ExcepcionServiciosAlquiler {
        try {
+           if(clienteDAO.load(docu)==null){
+                throw new UnsupportedOperationException("Cliente Null Pa");
+           }
            clienteDAO.vetarCliente(docu, estado);
        } catch (Exception e) {
            throw new UnsupportedOperationException("Not supported yet.");

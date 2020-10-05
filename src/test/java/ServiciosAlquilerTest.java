@@ -158,19 +158,21 @@ public class ServiciosAlquilerTest {
     }
 
     @Test
-    public void deberiaConsultarMulta(){
+    public void deberiaConsultarMulta() throws ExcepcionServiciosAlquiler {
         try {
             ArrayList<ItemRentado> itemRentados = new ArrayList<ItemRentado>();
-            Cliente cliente = new Cliente("prueba", 7896, "prueba", "prueba", "prueba", false, itemRentados);
-            Item item = new Item(new TipoItem(195, "prueba"), 717,
-                    "prueba", "prueba", new SimpleDateFormat("yyyy/MM/dd").parse("2020/09/28"),
-                    110, "prueba", "prueba");
-            serviciosAlquiler.registrarItem(item);
+            Cliente cliente = new Cliente("Prueba", 1276, "Prueba", "Prueba", "Prueba", false, itemRentados);
             serviciosAlquiler.registrarCliente(cliente);
-            itemRentados.add(new ItemRentado(943, item, Date.valueOf(LocalDate.parse("2021-10-28")), Date.valueOf(LocalDate.parse("2021-10-29"))));
-            serviciosAlquiler.registrarAlquilerCliente(Date.valueOf(LocalDate.parse("2021-10-28")), 7896, item, 8);
-            Assert.assertEquals(297, serviciosAlquiler.consultarMultaAlquiler(7896, Date.valueOf(LocalDate.parse("2021-11-01"))));
-            Assert.assertEquals(0, serviciosAlquiler.consultarMultaAlquiler(7896, Date.valueOf(LocalDate.parse("2021-10-29"))));
+            Item it = new Item(new TipoItem(1, "prueba"), 6513,
+                    "prueba", "prueba", new SimpleDateFormat("yyyy/MM/dd").parse("2019/09/28"),
+                    65, "prueba", "prueba");
+            serviciosAlquiler.registrarItem(it);
+            LocalDate fechainicio = LocalDate.parse("2021-10-28");
+            LocalDate fechafin = LocalDate.parse("2021-10-29");
+            LocalDate fechaDevolucion = LocalDate.parse("2021-11-01");
+            itemRentados.add(new ItemRentado(1, it, Date.valueOf(fechainicio), Date.valueOf(fechafin)));
+            serviciosAlquiler.registrarAlquilerCliente(Date.valueOf(fechainicio), 1276, it, 1);
+            serviciosAlquiler.consultarMultaAlquiler(6513, Date.valueOf(fechaDevolucion));
         } catch (Exception e) {
             fail(e.toString());
         }
