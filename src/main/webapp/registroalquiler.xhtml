@@ -5,7 +5,57 @@
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title> Registro Alquiler </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
 </h:head>
 <h:body>
+    <div class="container">
+        <h:form id="FormularioA">
+            <p:dataTable id="alquilerDT" var="alquiler" value="#{AlquilerItem.getselectedCliente().rentados}" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records" rowsPerPageTemplate="5,10,15" tableStyleClass="table table-striped table-bordered p-3 mb-2 bg-primary text-white">
+                <f:facet name="header">
+                    Items Rentados del Cliente
+                </f:facet>
+                <p:column headerText="Id">
+                    <h:outputText value="#{alquiler.item.id}"/>
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{alquiler.item.nombre}"/>
+                </p:column>
+                <p:column headerText="Descripcion">
+                    <h:outputText value="#{alquiler.item.descripcion}"/>
+                </p:column>
+                <p:column headerText="Precio">
+                    <h:outputText value="#{alquiler.item.precio}"/>
+                </p:column>
+                <p:column headerText="Fecha Inicio">
+                    <h:outputText value="#{alquiler.fechainrenta}"/>
+                </p:column>
+                <p:column headerText="Fecha Fin">
+                    <h:outputText value="#{alquiler.fechafinrenta}"/>
+                </p:column>
+                <p:column headerText="Multa">
+                    <h:outputText value="#{AlquilerItem.consultarMulta(alquiler.item.id)}"/>
+                </p:column >
+            </p:dataTable>
+            <h:panelGrid columns ="1" cellpadding="5">
+                <f:facet name="header" >
+                    Registrar Item
+                </f:facet>
+                <div class="form-group">
+                    <p:outputLabel for="@next" value="Ingrese id item" />
+                    <p:inputText  id= "item" type="String" binding="#{id}"/>
+                </div>
+                <div class="form-group">
+                    <p:outputLabel for="@next" value="Ingrese el numero de días" />
+                    <p:inputText  id= "numdias" type="String" binding="#{dias}" />
+                </div>
+                <div class="form-group">
+                    <p:outputLabel value="Costo del alquiler"/>
+                    <h:outputText value="#{AlquilerItem.getCosto()}"/>
+                </div>
+                <p:commandButton value="Registrar" update="FormularioA" action="registroCliente?faces-redirect = true" actionListener="#{AlquilerItem.registrarAlquiler(id.value,dias.value)}" class="btn btn-primary" style="margin-top: 10%;"/>
+                <p:commandButton value="Consultar Costo" update="FormularioA"  actionListener="#{AlquilerItem.consultarCosto(id.value,dias.value)}" class="btn btn-primary" style="margin-top: 10%;"/>
+            </h:panelGrid>
+        </h:form>
+    </div>
 </h:body>
 </html>
