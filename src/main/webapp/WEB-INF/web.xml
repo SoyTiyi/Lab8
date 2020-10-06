@@ -19,4 +19,8 @@
     <listener>
         <listener-class>edu.eci.cvds.guice.GuiceContextListener</listener-class>
     </listener>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>none</param-value>
+    </context-param>
 </web-app>
