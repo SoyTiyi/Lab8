@@ -13,11 +13,12 @@
             <h1 style="color: white;"> Lab 8</h1>
         </div>
         <h:form id="FormularioC" class="form-group" >
-            <p:dataTable id="clienteDT" var="cliente" value="#{AlquilerItem.consultarClientes()}" selection="#{AlquilerItem.cliente}" rowKey="#{cliente.documento}" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records" rowsPerPageTemplate="5,10,15" tableStyleClass="table table-striped table-bordered p-3 mb-2 bg-primary text-white">
+            <p:dataTable  id="clienteDT" var="cliente" value="#{AlquilerItem.consultarClientes()}" selection="#{AlquilerItem.cliente}" rowKey="#{cliente.documento}" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records" rowsPerPageTemplate="5,10,15" tableStyleClass="table table-striped table-bordered p-3 mb-2 bg-primary text-white" >
                 <f:facet name="header" style="color: #35A1E8;" >
                     Clientes
                 </f:facet>
-                <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                <p:column selectionMode="single" style="width:auto;text-align:center;" class="form-check-input"/>
+                   
                 <p:column headerText="Documento">
                     <h:outputText value="#{cliente.documento}" />
                 </p:column>
@@ -34,7 +35,7 @@
                     <h:outputText value="#{cliente.email}" />
                 </p:column>
                 <f:facet name="footer">
-                    <h:commandButton id="Clientes"  value="Ver" action="registroAlquiler?faces-redirect = true" class="btn btn-primary"/>
+                    <h:commandButton id="Clientes"  value="Ver" action="registroalquiler?faces-redirect = true" class="btn btn-primary"/>
                 </f:facet>
             </p:dataTable>
             <h:panelGrid columns="1" >

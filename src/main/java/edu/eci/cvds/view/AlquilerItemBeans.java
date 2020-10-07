@@ -8,9 +8,11 @@ import javax.faces.bean.ManagedBean;
 import com.google.inject.Inject;
 
 import edu.eci.cvds.samples.entities.Cliente;
+import edu.eci.cvds.samples.entities.Item;
 import edu.eci.cvds.samples.entities.ItemRentado;
 import edu.eci.cvds.samples.services.ExcepcionServiciosAlquiler;
 import edu.eci.cvds.samples.services.ServiciosAlquiler;
+import java.sql.Date;
 
 @ManagedBean(name = "AlquilerItem")
 @ApplicationScoped
@@ -75,5 +77,28 @@ public class AlquilerItemBeans extends BasePageBean{
      */
     public Cliente getCliente(){
         return cliente;
+    }
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public void registrarAlquiler(int idItem , int numdias) throws ExcepcionServiciosAlquiler {
+        Item item = serviciosAlquiler.consultarItem(idItem);
+        serviciosAlquiler.registrarAlquilerCliente(new Date(System.currentTimeMillis()),cliente.getDocumento(),item,numdias);
+    }
+
+    public long consultarMulta(int iditem) throws ExcepcionServiciosAlquiler {
+        try {
+            return serviciosAlquiler.consultarMultaAlquiler(iditem, new Date(System.currentTimeMillis()));
+        } catch (ExcepcionServiciosAlquiler excepcionServiciosAlquiler) {
+            throw new ExcepcionServiciosAlquiler("Error al consultar multa alquiler");
+        }
+    }
+    public void consultarCosto(int iditem , int numdias) throws ExcepcionServiciosAlquiler {
+        try {
+            this.costo = serviciosAlquiler.consultarCostoAlquiler(iditem, numdias);
+        } catch (ExcepcionServiciosAlquiler excepcionServiciosAlquiler) {
+            throw new ExcepcionServiciosAlquiler("Error al consultar costo alquiler");
+        }
     }
 }
