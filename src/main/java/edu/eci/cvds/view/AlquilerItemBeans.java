@@ -36,7 +36,7 @@ public class AlquilerItemBeans extends BasePageBean{
             Cliente newCliente = new Cliente(nombre,documento,telefono,direccion,email);
             serviciosAlquiler.registrarCliente(newCliente);
         } catch (Exception e) {
-            throw new ExcepcionServiciosAlquiler("Tuvimos un error al registrar la cliente, OPS!");
+            throw new ExcepcionServiciosAlquiler(e.toString());
         }
     }
 

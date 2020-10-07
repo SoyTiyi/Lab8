@@ -58,7 +58,7 @@ public class MyBATISClienteDAO implements ClienteDAO {
         try {
             clienteMapper.registrarCliente(c);
         } catch (Exception e) {
-            throw new PersistenceException("Error al registrar cliente", e);
+            throw new PersistenceException(e.toString(), e);
         }
 
     }

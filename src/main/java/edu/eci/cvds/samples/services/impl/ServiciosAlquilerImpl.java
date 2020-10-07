@@ -151,7 +151,7 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
        try {
            clienteDAO.addCliente(c);
        } catch (Exception e) {
-           throw new UnsupportedOperationException("Error al registrar al nuevo Cliente");
+           throw new UnsupportedOperationException(e.toString());
        }
    }
 
