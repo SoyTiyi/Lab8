@@ -69,4 +69,11 @@ public class AlquilerItemBeans extends BasePageBean{
             throw new ExcepcionServiciosAlquiler("Error al consultar los items del cliente con documeto "+documento+", OPS!");
         }
     }
+
+    /**
+     * Este metodo retorna el cliente 
+     */
+    public Cliente getCliente(){
+        return cliente;
+    }
 }

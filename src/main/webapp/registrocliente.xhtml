@@ -13,7 +13,7 @@
             <h1 style="color: white;"> Lab 8</h1>
         </div>
         <h:form id="FormularioC" class="form-group" >
-            <p:dataTable id="clienteDT" var="cliente" value="#{AlquilerItem.consultarClientes()}" selection="#{AlquilerItem.selectedCliente}" rowKey="#{cliente.documento}" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records" rowsPerPageTemplate="5,10,15" tableStyleClass="table table-striped table-bordered p-3 mb-2 bg-primary text-white">
+            <p:dataTable id="clienteDT" var="cliente" value="#{AlquilerItem.consultarClientes()}" selection="#{AlquilerItem.cliente}" rowKey="#{cliente.documento}" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records" rowsPerPageTemplate="5,10,15" tableStyleClass="table table-striped table-bordered p-3 mb-2 bg-primary text-white">
                 <f:facet name="header" style="color: #35A1E8;" >
                     Clientes
                 </f:facet>
